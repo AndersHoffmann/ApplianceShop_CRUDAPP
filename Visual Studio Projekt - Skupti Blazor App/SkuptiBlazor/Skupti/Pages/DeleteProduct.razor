@@ -1,0 +1,50 @@
+﻿@using Skupti.Data
+@page "/DeleteProduct/{id:int}"
+@inject IService Service
+@inject NavigationManager NavigationManager
+
+<h1>Delete Product</h1>
+<p style="color:red;text-align:left">Er du sikker på at produktet skal slettes?</p>
+
+<table class="editform">
+    <tr>
+        <td>Product Name:</td>
+        <td>@product.ProductName</td>
+    </tr>
+    <tr>
+        <td>Description:</td>
+        <td>@product.BrandId</td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align:center">
+            <input type="button" value="Slet" @onclick="@Delete" />
+            <input type="button" value="Annuller" @onclick="@Cancel" />
+        </td>
+    </tr>
+</table>
+
+
+@code {
+
+    Product product = new Product();
+
+    [Parameter]
+    public int id { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await Service.ProductGetOne(id);
+    }
+
+    protected async Task Delete()
+    {
+        await Service.ProductDelete(id);
+        NavigationManager.NavigateTo("/ListOfProducts");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/ListOfProducts");
+    }
+
+}

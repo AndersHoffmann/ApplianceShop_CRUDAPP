@@ -1,0 +1,115 @@
+﻿@using System.Security.Permissions
+@using Skupti.Data
+
+@page "/AddEditProduct/{id:int}"
+@inject IService Service
+@inject NavigationManager NavigationManager
+
+<h1>@pageTitle</h1>
+
+
+
+<EditForm Model="@product" OnValidSubmit="@ProductSave">
+    <table>
+        <tr>
+            <td>Produktnavn</td>
+            <td><input type="text" placeholder="Indtast produktnavn" @bind="product.ProductName" required /></td>
+        </tr>
+        <tr>
+            <td>Mærke</td>
+            <td>
+                <select name="number" @bind="product.BrandId">
+                    <option value="1">Siemens</option>
+                    <option value="2">Bosch</option>
+                    <option value="3">Miele</option>
+                    <option value="4">Blomberg</option>
+                    <option value="5">Candy</option>
+                    <option value="6">AEG</option>
+                    <option value="7">Electrolux</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Pris</td>
+            <td><input type="text" placeholder="Indtast pris" @bind="product.Price" required /></td>
+        </tr>
+        <tr>
+            <td>Varegruppe</td>
+            <td>
+                <select name="number" @bind="product.SubCategoryId">
+                    <option value="1">Underbygningsopvaskemaskiner</option>
+                    <option value="2">Integrerbare Opvaskemaskiner</option>
+                    <option value="3">Fritstående Opvaskemaskiner</option>
+                    <option value="4">Bordopvaskemaskiner</option>
+                    <option value="5">Smalle Opvaskemaskiner</option>
+                    <option value="6">Frontbetjente Vaskemaskiner</option>
+                    <option value="7">Topbetjente Vaskemaskiner</option>
+                    <option value="8">Vaske-tørremaskiner</option>
+                    <option value="9">Kondenstørretublere</option>
+                    <option value="10">Aftrækstørretublere</option>
+                    <option value="11">Tørreskabe</option>
+
+                </select>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <input type="submit" value="@buttonText" />
+                <input type="button" value="Fortryd" @onclick="@Cancel" />
+            </td>
+        </tr>
+    </table>
+</EditForm>
+
+@code {
+
+    Product product = new Product();
+
+    [Parameter]
+    public int id { get; set; }
+
+    public string pageTitle;
+    public string buttonText;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (id == 0)
+        {
+            pageTitle = "Opret nyt produkt";
+            buttonText = "Opret produktet";
+        }
+        else
+        {
+
+            pageTitle = "Rediger produkt";
+            buttonText = "Opdater produkt";
+            product = await Service.ProductGetOne(id);
+        }
+
+    }
+
+    protected async Task ProductSave()
+    {
+        if (product.ProductID == 0)
+        {
+            await Service.ProductInsert(product);
+            NavigationManager.NavigateTo("/ListOfProducts");
+        }
+        else
+        {
+            await Service.ProductUpdate(product);
+            NavigationManager.NavigateTo("/ListOfProducts");
+        }
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/ListOfProducts");
+    }
+
+}

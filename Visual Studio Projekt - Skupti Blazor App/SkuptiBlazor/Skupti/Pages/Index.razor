@@ -1,0 +1,27 @@
+﻿@page "/"
+
+@inject NavigationManager NavigationManager
+
+<h1>Skupti Gigangen</h1>
+
+<table>
+    <tr>
+        <td colspan="2" style="text-align:center">
+            <input class="link-button1" type="button" value="Liste af produkter" @onclick="@GoToProductList" />
+        </td>
+    </tr>
+    <tr>
+    </tr>
+
+
+</table>
+
+
+@code {
+
+    void GoToProductList()
+    {
+        NavigationManager.NavigateTo("/ListOfProducts");
+    }
+
+}
