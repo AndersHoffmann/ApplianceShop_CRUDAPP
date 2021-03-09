@@ -110,7 +110,7 @@ namespace Skupti.CRUD_Classes
             var readAllProductsAndTheirCategories = new SqlCommand
             {
                 Connection = conn,
-                CommandText = ($@"SELECT Game.GameID, Player.PlayerName FROM Game JOIN Winner ON Game.GameID=Winner.GameID JOIN Player ON Winner.PlayerID=Player.PlayerID")
+                CommandText = ($@"SELECT Products.productId, Products.ProductName, Products.Price, Brands.BrandName, Products.BrandId, SubCategories.SubCategoryName, SubCategories.SubCategoryId, Categories.CategoryName, Categories.CategoryId FROM Products JOIN Brands ON Brands.BrandId=Products.BrandId JOIN SubCategories ON Products.SubCategoryId=SubCategories.SubcategoryId JOIN Categories ON Subcategories.CategoryId=Categories.CategoryId")
             };
 
             SqlDataReader reader = readAllProductsAndTheirCategories.ExecuteReader();
